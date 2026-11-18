@@ -1,0 +1,2317 @@
+<!doctype html>
+<html lang="en" class="scroll-smooth">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AuraReach — Instagram Growth Storefront</title>
+    <meta
+      name="description"
+      content="Modern mobile-friendly Instagram Views and Likes storefront with instant on-page order checkout."
+    />
+    <meta property="og:title" content="AuraReach — Instagram Growth Storefront" />
+    <meta
+      property="og:description"
+      content="Modern mobile-friendly Instagram Views and Likes storefront with instant on-page order checkout."
+    />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <!-- Fonts: Outfit (Display), Plus Jakarta Sans (Body), JetBrains Mono (Tabular Prices) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;600;700&family=Outfit:wght@600;700&family=Plus+Jakarta+Sans:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Tailwind CSS Play CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              display: ['"Outfit"', 'system-ui', 'sans-serif'],
+              sans: ['"Plus Jakarta Sans"', 'system-ui', 'sans-serif'],
+              mono: ['"JetBrains Mono"', 'ui-monospace', 'monospace'],
+            },
+            colors: {
+              obsidian: '#08060E',
+              plum: {
+                950: '#0E0A1A',
+                900: '#140F24',
+                850: '#1B1431',
+                800: '#241B40',
+              },
+              neon: {
+                400: '#C084FC',
+                500: '#A855F7',
+                600: '#9333EA',
+              },
+              gold: {
+                300: '#FDE047',
+                400: '#F5C451',
+                500: '#EAB308',
+              },
+            },
+          },
+        },
+      };
+    </script>
+
+    <style>
+      :root {
+        --bg-canvas: #08060e;
+        --bg-surface: #120d20;
+        --bg-surface-elevated: #19132b;
+        --border-subtle: rgba(168, 85, 247, 0.22);
+        --border-gold: rgba(245, 196, 81, 0.45);
+        --accent-purple: #a855f7;
+        --accent-purple-bright: #c084fc;
+        --accent-gold: #f5c451;
+        --text-primary: #f7f5fc;
+        --text-muted: #b5add0;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html {
+        background-color: var(--bg-canvas);
+        color: var(--text-primary);
+        font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+      }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        background-color: var(--bg-canvas);
+        background-image:
+          radial-gradient(ellipse 75% 45% at 15% -5%, rgba(147, 51, 234, 0.22), transparent 65%),
+          radial-gradient(ellipse 55% 40% at 88% 8%, rgba(245, 196, 81, 0.1), transparent 60%);
+        color: var(--text-primary);
+        letter-spacing: 0.01em;
+      }
+
+      .font-display {
+        font-family: 'Outfit', system-ui, -apple-system, sans-serif;
+      }
+
+      .font-mono-num {
+        font-family: 'JetBrains Mono', ui-monospace, monospace;
+        font-variant-numeric: tabular-nums;
+      }
+
+      .headline-balance {
+        text-wrap: balance;
+      }
+
+      /* Interactive Package Card */
+      .package-card {
+        position: relative;
+        background: linear-gradient(180deg, rgba(25, 19, 43, 0.92) 0%, rgba(15, 11, 28, 0.96) 100%);
+        border: 1px solid rgba(168, 85, 247, 0.22);
+        transition:
+          transform 180ms cubic-bezier(0.16, 1, 0.3, 1),
+          border-color 180ms cubic-bezier(0.16, 1, 0.3, 1),
+          box-shadow 180ms cubic-bezier(0.16, 1, 0.3, 1);
+      }
+
+      .package-card:hover {
+        transform: translateY(-2px);
+        border-color: rgba(192, 132, 252, 0.55);
+        box-shadow: 0 12px 30px -12px rgba(168, 85, 247, 0.32);
+      }
+
+      .package-card:focus-visible {
+        outline: 2px solid #f5c451;
+        outline-offset: 2px;
+      }
+
+      .package-card.is-selected {
+        background: linear-gradient(180deg, rgba(36, 23, 64, 0.96) 0%, rgba(20, 14, 38, 0.98) 100%);
+        border-color: #f5c451;
+        box-shadow:
+          0 0 0 1px rgba(245, 196, 81, 0.4),
+          0 14px 36px -10px rgba(168, 85, 247, 0.42),
+          0 0 24px -6px rgba(245, 196, 81, 0.22);
+      }
+
+      .package-card .card-action-label {
+        border: 1px solid rgba(168, 85, 247, 0.28);
+        color: #dfd8f3;
+        background-color: rgba(168, 85, 247, 0.08);
+        transition:
+          background-color 160ms cubic-bezier(0.16, 1, 0.3, 1),
+          color 160ms cubic-bezier(0.16, 1, 0.3, 1),
+          border-color 160ms cubic-bezier(0.16, 1, 0.3, 1);
+      }
+
+      .package-card.is-selected .card-action-label {
+        background-color: #f5c451;
+        border-color: #f5c451;
+        color: #090610;
+      }
+
+      /* Primary Gold CTA */
+      .btn-gold {
+        background: linear-gradient(135deg, #f5c451 0%, #eab308 100%);
+        color: #090610;
+        transition:
+          transform 160ms cubic-bezier(0.16, 1, 0.3, 1),
+          filter 160ms cubic-bezier(0.16, 1, 0.3, 1),
+          box-shadow 160ms cubic-bezier(0.16, 1, 0.3, 1);
+      }
+
+      .btn-gold:hover {
+        filter: brightness(1.06);
+        box-shadow: 0 10px 28px -8px rgba(245, 196, 81, 0.5);
+        transform: translateY(-1px);
+      }
+
+      .btn-gold:active {
+        transform: translateY(0);
+      }
+
+      .btn-gold:focus-visible {
+        outline: 2px solid #c084fc;
+        outline-offset: 2px;
+      }
+
+      /* Primary Neon Purple CTA */
+      .btn-purple {
+        background: linear-gradient(135deg, #a855f7 0%, #7e22ce 100%);
+        color: #ffffff;
+        transition:
+          transform 160ms cubic-bezier(0.16, 1, 0.3, 1),
+          box-shadow 160ms cubic-bezier(0.16, 1, 0.3, 1),
+          filter 160ms cubic-bezier(0.16, 1, 0.3, 1);
+      }
+
+      .btn-purple:hover {
+        filter: brightness(1.08);
+        box-shadow: 0 10px 28px -8px rgba(168, 85, 247, 0.55);
+        transform: translateY(-1px);
+      }
+
+      /* Form Input Styling */
+      .neon-input {
+        background-color: #0c0916;
+        border: 1px solid rgba(168, 85, 247, 0.28);
+        color: #f7f5fc;
+        transition:
+          border-color 160ms cubic-bezier(0.16, 1, 0.3, 1),
+          box-shadow 160ms cubic-bezier(0.16, 1, 0.3, 1);
+      }
+
+      .neon-input:focus {
+        outline: none;
+        border-color: #f5c451;
+        box-shadow: 0 0 0 3px rgba(245, 196, 81, 0.16);
+      }
+
+      .neon-input[aria-invalid='true'] {
+        border-color: #fb7185;
+        box-shadow: 0 0 0 3px rgba(251, 113, 133, 0.16);
+      }
+
+      /* Subtle pulse animation for updated form summary (compositor-only) */
+      @keyframes summaryPop {
+        0% {
+          transform: scale(0.99);
+          opacity: 0.75;
+        }
+        100% {
+          transform: scale(1);
+          opacity: 1;
+        }
+      }
+
+      .animate-summary-pop {
+        animation: summaryPop 200ms cubic-bezier(0.16, 1, 0.3, 1);
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        *,
+        *::before,
+        *::after {
+          animation-duration: 0.01ms !important;
+          animation-iteration-count: 1 !important;
+          transition-duration: 0.01ms !important;
+          scroll-behavior: auto !important;
+        }
+      }
+    </style>
+  </head>
+
+  <body class="antialiased selection:bg-purple-500/30 selection:text-amber-200">
+    <!-- Subtle Fixed Diagonal Background Watermark -->
+    <div
+      aria-hidden="true"
+      class="pointer-events-none fixed inset-0 z-0 flex items-center justify-center overflow-hidden select-none"
+    >
+      <span
+        class="font-display whitespace-nowrap text-[clamp(3.25rem,11vw,8.5rem)] font-bold tracking-[0.14em] text-[#C084FC]"
+        style="opacity: 0.08; transform: rotate(-24deg);"
+      >
+        Ankit Das
+      </span>
+    </div>
+
+    <!-- Top Bar: Slim Attribution Strip + 3-Zone Navigation -->
+    <header
+      id="top"
+      class="sticky top-0 z-40 border-b border-purple-500/20 bg-[#08060E]/90 backdrop-blur-md"
+    >
+      <div class="border-b border-purple-500/15 bg-[#06040B]/95 px-4 py-1.5 text-center">
+        <p class="text-[11px] font-medium tracking-wider text-[#B5ADD0]">
+          Powered by <span class="font-semibold text-[#F5C451]">Ankit Das</span>
+        </p>
+      </div>
+      <div class="mx-auto flex max-w-6xl items-center justify-between gap-8 px-4 py-3 sm:px-6">
+        <!-- Zone 1: Single-line Brand Wordmark -->
+        <a
+          href="#top"
+          class="font-display text-xl font-bold tracking-tight text-white whitespace-nowrap shrink-0"
+        >
+          Aura<span class="text-[#F5C451]">Reach</span>
+        </a>
+
+        <!-- Zone 2: Concise Single-line Navigation Links -->
+        <nav
+          aria-label="Primary Navigation"
+          class="hidden md:flex items-center gap-7 text-sm font-medium text-[#B5ADD0]"
+        >
+          <a
+            href="#views-section"
+            class="hover:text-white transition-colors whitespace-nowrap shrink-0"
+          >
+            Views
+          </a>
+          <a
+            href="#likes-section"
+            class="hover:text-white transition-colors whitespace-nowrap shrink-0"
+          >
+            Likes
+          </a>
+          <a
+            href="#how-it-works"
+            class="hover:text-white transition-colors whitespace-nowrap shrink-0"
+          >
+            How It Works
+          </a>
+          <a
+            href="#order-form"
+            class="hover:text-white transition-colors whitespace-nowrap shrink-0"
+          >
+            Order Form
+          </a>
+        </nav>
+
+        <!-- Zone 3: Single Primary Action -->
+        <div class="flex items-center shrink-0">
+          <a
+            href="#order-form"
+            class="btn-gold inline-flex min-h-[40px] items-center justify-center rounded-lg px-4 py-2 text-sm font-semibold whitespace-nowrap shrink-0"
+          >
+            Order Now
+          </a>
+        </div>
+      </div>
+    </header>
+
+    <main class="relative z-10 mx-auto max-w-6xl px-4 sm:px-6">
+      <!-- 1. Hero Section -->
+      <section class="py-10 sm:py-14 lg:py-16">
+        <div class="grid grid-cols-1 items-stretch gap-8 lg:grid-cols-12 lg:gap-10">
+          <!-- Left Column: Proposition & Primary CTA -->
+          <div class="flex flex-col justify-center lg:col-span-7">
+            <p class="text-xs font-medium tracking-wide text-[#F5C451]">
+              Instagram Views &amp; Likes Storefront · Instant Order Checkout
+            </p>
+            <h1
+              class="font-display headline-balance mt-3 text-[clamp(2.25rem,4.2vw,3.65rem)] font-bold leading-[1.08] tracking-tight text-white"
+            >
+              Instant reach for your Instagram Reels and posts.
+            </h1>
+            <p class="mt-4 max-w-xl text-base leading-relaxed text-[#B5ADD0] sm:text-[17px]">
+              Pick a views or likes package starting at
+              <span class="font-mono-num font-semibold text-[#F5C451]">₹3</span>, paste your public
+              post or Reel link below, and place your order directly on this page in seconds.
+            </p>
+
+            <div class="mt-7 flex flex-wrap items-center gap-4">
+              <a
+                href="#packages"
+                class="btn-purple inline-flex min-h-[46px] items-center justify-center gap-2 rounded-xl px-6 py-3 text-sm font-semibold whitespace-nowrap shrink-0"
+              >
+                <span>Select a Package</span>
+                <svg
+                  class="h-4 w-4"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  aria-hidden="true"
+                >
+                  <path d="M12 5v14" />
+                  <path d="m19 12-7 7-7-7" />
+                </svg>
+              </a>
+              <a
+                href="#order-form"
+                class="inline-flex min-h-[46px] items-center justify-center rounded-xl border border-purple-500/30 bg-[#140F24] px-5 py-3 text-sm font-semibold text-[#EAE4FA] transition-colors hover:border-[#F5C451]/60 hover:text-white whitespace-nowrap shrink-0"
+              >
+                Go to Order Form
+              </a>
+            </div>
+
+            <div
+              class="mt-8 flex flex-wrap items-center gap-x-3 gap-y-2 border-t border-purple-500/20 pt-5 text-xs font-medium text-[#B5ADD0]"
+            >
+              <span>Public Links Only</span>
+              <span aria-hidden="true" class="text-purple-400/60">·</span>
+              <span>No Password Required</span>
+              <span aria-hidden="true" class="text-purple-400/60">·</span>
+              <span>Transparent Pricing in INR (₹)</span>
+            </div>
+          </div>
+
+          <!-- Right Column: Self-Contained Neon & Gold Storefront Visual Card -->
+          <div class="lg:col-span-5">
+            <div
+              class="relative flex h-full flex-col justify-between overflow-hidden rounded-2xl border border-purple-500/30 bg-[#120D20] p-6 shadow-[0_20px_50px_-20px_rgba(168,85,247,0.35)]"
+            >
+              <div
+                aria-hidden="true"
+                class="pointer-events-none absolute -right-14 -top-14 h-48 w-48 rounded-full bg-purple-600/25 blur-3xl"
+              ></div>
+              <div
+                aria-hidden="true"
+                class="pointer-events-none absolute -bottom-12 -left-12 h-40 w-40 rounded-full bg-amber-400/15 blur-3xl"
+              ></div>
+
+              <div class="relative flex items-center justify-between border-b border-purple-500/20 pb-4">
+                <div>
+                  <p class="text-xs font-medium text-[#B5ADD0]">Live Rate Card</p>
+                  <p class="font-display mt-0.5 text-lg font-bold text-white">
+                    Views &amp; Likes Menu
+                  </p>
+                </div>
+                <span class="font-mono-num text-sm font-semibold text-[#F5C451]">INR ₹</span>
+              </div>
+
+              <!-- Clean vector growth curve + quick-pick summary -->
+              <div class="relative my-5 rounded-xl border border-purple-500/20 bg-[#0B0814]/90 p-4">
+                <svg
+                  viewBox="0 0 360 116"
+                  class="h-28 w-full"
+                  role="img"
+                  aria-label="Instagram Reel views and likes growth trajectory illustration"
+                >
+                  <defs>
+                    <linearGradient id="neonCurve" x1="0%" y1="0%" x2="100%" y2="0%">
+                      <stop offset="0%" stop-color="#A855F7" />
+                      <stop offset="65%" stop-color="#C084FC" />
+                      <stop offset="100%" stop-color="#F5C451" />
+                    </linearGradient>
+                    <linearGradient id="neonFill" x1="0%" y1="0%" x2="0%" y2="100%">
+                      <stop offset="0%" stop-color="#A855F7" stop-opacity="0.32" />
+                      <stop offset="100%" stop-color="#A855F7" stop-opacity="0" />
+                    </linearGradient>
+                  </defs>
+                  <line x1="12" y1="96" x2="348" y2="96" stroke="rgba(168,85,247,0.22)" stroke-width="1" />
+                  <line x1="12" y1="64" x2="348" y2="64" stroke="rgba(168,85,247,0.12)" stroke-dasharray="4 4" stroke-width="1" />
+                  <line x1="12" y1="32" x2="348" y2="32" stroke="rgba(168,85,247,0.12)" stroke-dasharray="4 4" stroke-width="1" />
+                  <path
+                    d="M 16 88 C 72 86, 108 68, 158 58 C 210 47, 255 34, 344 16 L 344 96 L 16 96 Z"
+                    fill="url(#neonFill)"
+                  />
+                  <path
+                    d="M 16 88 C 72 86, 108 68, 158 58 C 210 47, 255 34, 344 16"
+                    fill="none"
+                    stroke="url(#neonCurve)"
+                    stroke-width="3"
+                    stroke-linecap="round"
+                  />
+                  <circle cx="16" cy="88" r="4" fill="#A855F7" />
+                  <circle cx="158" cy="58" r="4.5" fill="#C084FC" />
+                  <circle cx="344" cy="16" r="5.5" fill="#F5C451" />
+                </svg>
+                <div class="mt-2 flex items-center justify-between text-xs text-[#B5ADD0]">
+                  <span>5K Views</span>
+                  <span>50K Views</span>
+                  <span>100K Views</span>
+                  <span class="font-semibold text-[#F5C451]">500K Views</span>
+                </div>
+              </div>
+
+              <div class="relative grid grid-cols-2 gap-3 text-sm">
+                <div class="rounded-xl border border-purple-500/20 bg-[#0D0A18] p-3.5">
+                  <p class="text-xs text-[#B5ADD0]">Instagram Views</p>
+                  <p class="font-mono-num mt-1 text-base font-bold text-white">
+                    ₹3 <span class="text-xs font-normal text-[#B5ADD0]">to</span> ₹110
+                  </p>
+                </div>
+                <div class="rounded-xl border border-purple-500/20 bg-[#0D0A18] p-3.5">
+                  <p class="text-xs text-[#B5ADD0]">Instagram Likes</p>
+                  <p class="font-mono-num mt-1 text-base font-bold text-[#F5C451]">
+                    ₹5 <span class="text-xs font-normal text-[#B5ADD0]">to</span> ₹10
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 2. Packages Catalog Section -->
+      <section id="packages" class="border-t border-purple-500/20 py-10 sm:py-14">
+        <div class="flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
+          <div>
+            <h2 class="font-display text-2xl font-bold tracking-tight text-white sm:text-3xl">
+              Select Your Growth Packages
+            </h2>
+            <p class="mt-1.5 text-sm text-[#B5ADD0] sm:text-base">
+              Pick a Views tier, a Likes tier, or combine both to calculate your total payable amount.
+            </p>
+          </div>
+
+          <!-- Interactive Category Filter Tabs -->
+          <div
+            role="tablist"
+            aria-label="Filter packages by category"
+            class="inline-flex items-center gap-1 self-start rounded-xl border border-purple-500/25 bg-[#120D20] p-1 sm:self-auto"
+          >
+            <button
+              type="button"
+              role="tab"
+              aria-selected="true"
+              data-filter="all"
+              class="filter-tab min-h-[38px] rounded-lg bg-[#A855F7] px-3.5 py-1.5 text-xs font-semibold text-white transition-colors whitespace-nowrap shrink-0"
+            >
+              All Packages
+            </button>
+            <button
+              type="button"
+              role="tab"
+              aria-selected="false"
+              data-filter="views"
+              class="filter-tab min-h-[38px] rounded-lg px-3.5 py-1.5 text-xs font-semibold text-[#B5ADD0] hover:text-white transition-colors whitespace-nowrap shrink-0"
+            >
+              Instagram Views
+            </button>
+            <button
+              type="button"
+              role="tab"
+              aria-selected="false"
+              data-filter="likes"
+              class="filter-tab min-h-[38px] rounded-lg px-3.5 py-1.5 text-xs font-semibold text-[#B5ADD0] hover:text-white transition-colors whitespace-nowrap shrink-0"
+            >
+              Instagram Likes
+            </button>
+          </div>
+        </div>
+
+        <!-- Live Selection & Combined Amount Bar -->
+        <div
+          id="live-bundle-bar"
+          class="mt-6 flex flex-col gap-3 rounded-2xl border border-purple-500/25 bg-[#120D20] px-5 py-4 sm:flex-row sm:items-center sm:justify-between"
+        >
+          <div class="flex flex-wrap items-center gap-x-4 gap-y-1.5 text-xs sm:text-sm">
+            <span class="text-[#B5ADD0]">
+              Views:
+              <strong id="bar-views-label" class="font-semibold text-white">50K Views</strong>
+            </span>
+            <span aria-hidden="true" class="text-purple-400/60">+</span>
+            <span class="text-[#B5ADD0]">
+              Likes:
+              <strong id="bar-likes-label" class="font-semibold text-white">1K Likes</strong>
+            </span>
+          </div>
+          <div class="flex items-center justify-between gap-4 sm:justify-end">
+            <span class="text-xs sm:text-sm text-[#B5ADD0]">
+              Total Amount:
+              <strong class="font-mono-num ml-1 text-lg font-bold text-[#F5C451]" id="bar-total-price">
+                ₹30
+              </strong>
+            </span>
+            <a
+              href="#order-form"
+              class="btn-gold inline-flex min-h-[36px] items-center justify-center rounded-lg px-3.5 py-1.5 text-xs font-bold whitespace-nowrap shrink-0"
+            >
+              Checkout
+            </a>
+          </div>
+        </div>
+
+        <!-- Category 1: Instagram Views -->
+        <div id="views-section" data-category-block="views" class="mt-8">
+          <div class="mb-4 flex items-baseline justify-between border-b border-purple-500/15 pb-2.5">
+            <h3 class="font-display text-lg font-bold text-white sm:text-xl">
+              01. Instagram Views
+            </h3>
+            <span class="text-xs font-medium text-[#B5ADD0]">Reels &amp; Video Posts · 9 Tiers</span>
+          </div>
+
+          <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            <!-- Package: 5K Views -->
+            <button
+              type="button"
+              class="package-card flex h-full flex-col justify-between rounded-2xl p-5 text-left"
+              data-id="views-5k"
+              data-group="views"
+              data-category="Instagram Views"
+              data-name="5K Views"
+              data-count="5000"
+              data-price="3"
+              aria-pressed="false"
+            >
+              <div>
+                <p class="text-xs font-medium text-[#B5ADD0]">
+                  Instagram Views <span aria-hidden="true">·</span> Starter
+                </p>
+                <div class="mt-3 flex items-baseline justify-between gap-2">
+                  <span class="font-display text-2xl font-bold text-white">5K Views</span>
+                  <span class="font-mono-num text-2xl font-bold text-[#F5C451]">₹3</span>
+                </div>
+                <ul class="mt-4 space-y-1.5 text-xs text-[#C7BFE0]">
+                  <li>Works on Reels &amp; Videos</li>
+                  <li>Fast automated start</li>
+                </ul>
+              </div>
+              <div
+                class="card-action-label mt-5 inline-flex min-h-[40px] w-full items-center justify-center rounded-xl px-4 py-2 text-xs font-semibold whitespace-nowrap"
+              >
+                Select 5K Views
+              </div>
+            </button>
+
+            <!-- Package: 10K Views -->
+            <button
+              type="button"
+              class="package-card flex h-full flex-col justify-between rounded-2xl p-5 text-left"
+              data-id="views-10k"
+              data-group="views"
+              data-category="Instagram Views"
+              data-name="10K Views"
+              data-count="10000"
+              data-price="5"
+              aria-pressed="false"
+            >
+              <div>
+                <p class="text-xs font-medium text-[#B5ADD0]">
+                  Instagram Views <span aria-hidden="true">·</span> Momentum
+                </p>
+                <div class="mt-3 flex items-baseline justify-between gap-2">
+                  <span class="font-display text-2xl font-bold text-white">10K Views</span>
+                  <span class="font-mono-num text-2xl font-bold text-[#F5C451]">₹5</span>
+                </div>
+                <ul class="mt-4 space-y-1.5 text-xs text-[#C7BFE0]">
+                  <li>Works on Reels &amp; Videos</li>
+                  <li>Fast automated start</li>
+                </ul>
+              </div>
+              <div
+                class="card-action-label mt-5 inline-flex min-h-[40px] w-full items-center justify-center rounded-xl px-4 py-2 text-xs font-semibold whitespace-nowrap"
+              >
+                Select 10K Views
+              </div>
+            </button>
+
+            <!-- Package: 20K Views -->
+            <button
+              type="button"
+              class="package-card flex h-full flex-col justify-between rounded-2xl p-5 text-left"
+              data-id="views-20k"
+              data-group="views"
+              data-category="Instagram Views"
+              data-name="20K Views"
+              data-count="20000"
+              data-price="10"
+              aria-pressed="false"
+            >
+              <div>
+                <p class="text-xs font-medium text-[#B5ADD0]">
+                  Instagram Views <span aria-hidden="true">·</span> Growth
+                </p>
+                <div class="mt-3 flex items-baseline justify-between gap-2">
+                  <span class="font-display text-2xl font-bold text-white">20K Views</span>
+                  <span class="font-mono-num text-2xl font-bold text-[#F5C451]">₹10</span>
+                </div>
+                <ul class="mt-4 space-y-1.5 text-xs text-[#C7BFE0]">
+                  <li>Works on Reels &amp; Videos</li>
+                  <li>High-retention delivery</li>
+                </ul>
+              </div>
+              <div
+                class="card-action-label mt-5 inline-flex min-h-[40px] w-full items-center justify-center rounded-xl px-4 py-2 text-xs font-semibold whitespace-nowrap"
+              >
+                Select 20K Views
+              </div>
+            </button>
+
+            <!-- Package: 50K Views -->
+            <button
+              type="button"
+              class="package-card flex h-full flex-col justify-between rounded-2xl p-5 text-left"
+              data-id="views-50k"
+              data-group="views"
+              data-category="Instagram Views"
+              data-name="50K Views"
+              data-count="50000"
+              data-price="20"
+              aria-pressed="false"
+            >
+              <div>
+                <p class="text-xs font-medium text-[#F5C451]">
+                  Instagram Views <span aria-hidden="true">·</span> Most Popular
+                </p>
+                <div class="mt-3 flex items-baseline justify-between gap-2">
+                  <span class="font-display text-2xl font-bold text-white">50K Views</span>
+                  <span class="font-mono-num text-2xl font-bold text-[#F5C451]">₹20</span>
+                </div>
+                <ul class="mt-4 space-y-1.5 text-xs text-[#C7BFE0]">
+                  <li>Works on Reels &amp; Videos</li>
+                  <li>Priority queue speed</li>
+                </ul>
+              </div>
+              <div
+                class="card-action-label mt-5 inline-flex min-h-[40px] w-full items-center justify-center rounded-xl px-4 py-2 text-xs font-semibold whitespace-nowrap"
+              >
+                Select 50K Views
+              </div>
+            </button>
+
+            <!-- Package: 80K Views -->
+            <button
+              type="button"
+              class="package-card flex h-full flex-col justify-between rounded-2xl p-5 text-left"
+              data-id="views-80k"
+              data-group="views"
+              data-category="Instagram Views"
+              data-name="80K Views"
+              data-count="80000"
+              data-price="30"
+              aria-pressed="false"
+            >
+              <div>
+                <p class="text-xs font-medium text-[#B5ADD0]">
+                  Instagram Views <span aria-hidden="true">·</span> High Reach
+                </p>
+                <div class="mt-3 flex items-baseline justify-between gap-2">
+                  <span class="font-display text-2xl font-bold text-white">80K Views</span>
+                  <span class="font-mono-num text-2xl font-bold text-[#F5C451]">₹30</span>
+                </div>
+                <ul class="mt-4 space-y-1.5 text-xs text-[#C7BFE0]">
+                  <li>Works on Reels &amp; Videos</li>
+                  <li>High-retention delivery</li>
+                </ul>
+              </div>
+              <div
+                class="card-action-label mt-5 inline-flex min-h-[40px] w-full items-center justify-center rounded-xl px-4 py-2 text-xs font-semibold whitespace-nowrap"
+              >
+                Select 80K Views
+              </div>
+            </button>
+
+            <!-- Package: 100K Views -->
+            <button
+              type="button"
+              class="package-card flex h-full flex-col justify-between rounded-2xl p-5 text-left"
+              data-id="views-100k"
+              data-group="views"
+              data-category="Instagram Views"
+              data-name="100K Views"
+              data-count="100000"
+              data-price="40"
+              aria-pressed="false"
+            >
+              <div>
+                <p class="text-xs font-medium text-[#B5ADD0]">
+                  Instagram Views <span aria-hidden="true">·</span> Viral Milestone
+                </p>
+                <div class="mt-3 flex items-baseline justify-between gap-2">
+                  <span class="font-display text-2xl font-bold text-white">100K Views</span>
+                  <span class="font-mono-num text-2xl font-bold text-[#F5C451]">₹40</span>
+                </div>
+                <ul class="mt-4 space-y-1.5 text-xs text-[#C7BFE0]">
+                  <li>Works on Reels &amp; Videos</li>
+                  <li>Steady natural pacing</li>
+                </ul>
+              </div>
+              <div
+                class="card-action-label mt-5 inline-flex min-h-[40px] w-full items-center justify-center rounded-xl px-4 py-2 text-xs font-semibold whitespace-nowrap"
+              >
+                Select 100K Views
+              </div>
+            </button>
+
+            <!-- Package: 200K Views -->
+            <button
+              type="button"
+              class="package-card flex h-full flex-col justify-between rounded-2xl p-5 text-left"
+              data-id="views-200k"
+              data-group="views"
+              data-category="Instagram Views"
+              data-name="200K Views"
+              data-count="200000"
+              data-price="60"
+              aria-pressed="false"
+            >
+              <div>
+                <p class="text-xs font-medium text-[#B5ADD0]">
+                  Instagram Views <span aria-hidden="true">·</span> Trending Push
+                </p>
+                <div class="mt-3 flex items-baseline justify-between gap-2">
+                  <span class="font-display text-2xl font-bold text-white">200K Views</span>
+                  <span class="font-mono-num text-2xl font-bold text-[#F5C451]">₹60</span>
+                </div>
+                <ul class="mt-4 space-y-1.5 text-xs text-[#C7BFE0]">
+                  <li>Works on Reels &amp; Videos</li>
+                  <li>Steady natural pacing</li>
+                </ul>
+              </div>
+              <div
+                class="card-action-label mt-5 inline-flex min-h-[40px] w-full items-center justify-center rounded-xl px-4 py-2 text-xs font-semibold whitespace-nowrap"
+              >
+                Select 200K Views
+              </div>
+            </button>
+
+            <!-- Package: 300K Views -->
+            <button
+              type="button"
+              class="package-card flex h-full flex-col justify-between rounded-2xl p-5 text-left"
+              data-id="views-300k"
+              data-group="views"
+              data-category="Instagram Views"
+              data-name="300K Views"
+              data-count="300000"
+              data-price="80"
+              aria-pressed="false"
+            >
+              <div>
+                <p class="text-xs font-medium text-[#B5ADD0]">
+                  Instagram Views <span aria-hidden="true">·</span> Mass Reach
+                </p>
+                <div class="mt-3 flex items-baseline justify-between gap-2">
+                  <span class="font-display text-2xl font-bold text-white">300K Views</span>
+                  <span class="font-mono-num text-2xl font-bold text-[#F5C451]">₹80</span>
+                </div>
+                <ul class="mt-4 space-y-1.5 text-xs text-[#C7BFE0]">
+                  <li>Works on Reels &amp; Videos</li>
+                  <li>Priority queue speed</li>
+                </ul>
+              </div>
+              <div
+                class="card-action-label mt-5 inline-flex min-h-[40px] w-full items-center justify-center rounded-xl px-4 py-2 text-xs font-semibold whitespace-nowrap"
+              >
+                Select 300K Views
+              </div>
+            </button>
+
+            <!-- Package: 500K Views -->
+            <button
+              type="button"
+              class="package-card flex h-full flex-col justify-between rounded-2xl p-5 text-left sm:col-span-2 lg:col-span-1"
+              data-id="views-500k"
+              data-group="views"
+              data-category="Instagram Views"
+              data-name="500K Views"
+              data-count="500000"
+              data-price="110"
+              aria-pressed="false"
+            >
+              <div>
+                <p class="text-xs font-medium text-[#F5C451]">
+                  Instagram Views <span aria-hidden="true">·</span> Maximum Scale
+                </p>
+                <div class="mt-3 flex items-baseline justify-between gap-2">
+                  <span class="font-display text-2xl font-bold text-white">500K Views</span>
+                  <span class="font-mono-num text-2xl font-bold text-[#F5C451]">₹110</span>
+                </div>
+                <ul class="mt-4 space-y-1.5 text-xs text-[#C7BFE0]">
+                  <li>Works on Reels &amp; Videos</li>
+                  <li>Best per-view value</li>
+                </ul>
+              </div>
+              <div
+                class="card-action-label mt-5 inline-flex min-h-[40px] w-full items-center justify-center rounded-xl px-4 py-2 text-xs font-semibold whitespace-nowrap"
+              >
+                Select 500K Views
+              </div>
+            </button>
+          </div>
+        </div>
+
+        <!-- Category 2: Instagram Likes -->
+        <div id="likes-section" data-category-block="likes" class="mt-10">
+          <div class="mb-4 flex items-baseline justify-between border-b border-purple-500/15 pb-2.5">
+            <h3 class="font-display text-lg font-bold text-white sm:text-xl">
+              02. Instagram Likes
+            </h3>
+            <span class="text-xs font-medium text-[#B5ADD0]">Photos, Carousels &amp; Reels · 2 Tiers</span>
+          </div>
+
+          <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+            <!-- Package: 300 Likes -->
+            <button
+              type="button"
+              class="package-card flex h-full flex-col justify-between rounded-2xl p-5 text-left"
+              data-id="likes-300"
+              data-group="likes"
+              data-category="Instagram Likes"
+              data-name="300 Likes"
+              data-count="300"
+              data-price="5"
+              aria-pressed="false"
+            >
+              <div>
+                <p class="text-xs font-medium text-[#B5ADD0]">
+                  Instagram Likes <span aria-hidden="true">·</span> Essential
+                </p>
+                <div class="mt-3 flex items-baseline justify-between gap-2">
+                  <span class="font-display text-2xl font-bold text-white">300 Likes</span>
+                  <span class="font-mono-num text-2xl font-bold text-[#F5C451]">₹5</span>
+                </div>
+                <ul class="mt-4 space-y-1.5 text-xs text-[#C7BFE0]">
+                  <li>Works on Posts, Carousels &amp; Reels</li>
+                  <li>No login or password needed</li>
+                </ul>
+              </div>
+              <div
+                class="card-action-label mt-5 inline-flex min-h-[40px] w-full items-center justify-center rounded-xl px-4 py-2 text-xs font-semibold whitespace-nowrap"
+              >
+                Select 300 Likes
+              </div>
+            </button>
+
+            <!-- Package: 1K Likes -->
+            <button
+              type="button"
+              class="package-card flex h-full flex-col justify-between rounded-2xl p-5 text-left"
+              data-id="likes-1k"
+              data-group="likes"
+              data-category="Instagram Likes"
+              data-name="1K Likes"
+              data-count="1000"
+              data-price="10"
+              aria-pressed="false"
+            >
+              <div>
+                <p class="text-xs font-medium text-[#F5C451]">
+                  Instagram Likes <span aria-hidden="true">·</span> Best Value
+                </p>
+                <div class="mt-3 flex items-baseline justify-between gap-2">
+                  <span class="font-display text-2xl font-bold text-white">1K Likes</span>
+                  <span class="font-mono-num text-2xl font-bold text-[#F5C451]">₹10</span>
+                </div>
+                <ul class="mt-4 space-y-1.5 text-xs text-[#C7BFE0]">
+                  <li>Works on Posts, Carousels &amp; Reels</li>
+                  <li>Smooth gradual engagement</li>
+                </ul>
+              </div>
+              <div
+                class="card-action-label mt-5 inline-flex min-h-[40px] w-full items-center justify-center rounded-xl px-4 py-2 text-xs font-semibold whitespace-nowrap"
+              >
+                Select 1K Likes
+              </div>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- 3. Order Form & Guidelines Section -->
+      <section id="order-form" class="border-t border-purple-500/20 py-10 sm:py-14">
+        <div class="grid grid-cols-1 items-stretch gap-8 lg:grid-cols-12">
+          <!-- Order Form Card -->
+          <div class="lg:col-span-7">
+            <div
+              class="h-full rounded-2xl border border-purple-500/30 bg-[#120D20] p-6 sm:p-8 shadow-[0_20px_50px_-24px_rgba(168,85,247,0.35)]"
+            >
+              <div class="flex flex-wrap items-center justify-between gap-2 border-b border-purple-500/20 pb-4">
+                <div>
+                  <h2 class="font-display text-2xl font-bold text-white">Complete Your Order</h2>
+                  <p class="mt-1 text-sm text-[#B5ADD0]">
+                    Review your selected package, enter your Instagram link, and submit your order.
+                  </p>
+                </div>
+                <a
+                  href="#packages"
+                  class="text-xs font-semibold text-[#C084FC] underline decoration-purple-400/40 underline-offset-4 hover:text-[#F5C451]"
+                >
+                  Change Package
+                </a>
+              </div>
+
+              <form id="checkout-form" novalidate class="mt-6 space-y-5">
+                <!-- Field 1: Combined Views & Likes Selection (auto-filled when clicked) -->
+                <div class="space-y-4">
+                  <div class="flex items-center justify-between gap-2">
+                    <span class="block text-sm font-semibold text-white">
+                      Selected Packages (Views &amp; Likes)
+                    </span>
+                    <span class="text-xs text-[#9E95BA]">Combine both or pick one</span>
+                  </div>
+
+                  <!-- Views Selection Row -->
+                  <div class="rounded-xl border border-purple-500/20 bg-[#0C0916] p-3.5">
+                    <div class="mb-2 flex items-center justify-between gap-2">
+                      <label
+                        for="selected-views-input"
+                        class="text-xs font-semibold text-[#C084FC]"
+                      >
+                        Instagram Views
+                      </label>
+                      <button
+                        type="button"
+                        id="clear-views-btn"
+                        class="text-xs font-medium text-[#9E95BA] hover:text-white transition-colors"
+                      >
+                        Remove
+                      </button>
+                    </div>
+                    <div class="grid grid-cols-1 gap-2.5 sm:grid-cols-12">
+                      <div class="sm:col-span-8">
+                        <input
+                          id="selected-views-input"
+                          name="selectedViews"
+                          type="text"
+                          readonly
+                          value=""
+                          placeholder="No views package selected"
+                          class="neon-input w-full rounded-xl px-3.5 py-2.5 text-sm font-semibold text-white placeholder:font-normal placeholder:text-[#7F759E] cursor-default"
+                        />
+                      </div>
+                      <div class="sm:col-span-4">
+                        <div
+                          class="flex h-[42px] items-center justify-between rounded-xl border border-purple-500/25 bg-[#120D20] px-2"
+                        >
+                          <button
+                            type="button"
+                            id="views-qty-minus"
+                            aria-label="Decrease views quantity"
+                            class="flex h-8 w-8 items-center justify-center rounded-lg text-base font-semibold text-[#C084FC] hover:bg-purple-500/15 hover:text-white transition-colors"
+                          >
+                            −
+                          </button>
+                          <span
+                            id="views-qty-display"
+                            class="font-mono-num text-sm font-semibold text-white"
+                          >
+                            1x
+                          </span>
+                          <button
+                            type="button"
+                            id="views-qty-plus"
+                            aria-label="Increase views quantity"
+                            class="flex h-8 w-8 items-center justify-center rounded-lg text-base font-semibold text-[#C084FC] hover:bg-purple-500/15 hover:text-white transition-colors"
+                          >
+                            +
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Likes Selection Row -->
+                  <div class="rounded-xl border border-purple-500/20 bg-[#0C0916] p-3.5">
+                    <div class="mb-2 flex items-center justify-between gap-2">
+                      <label
+                        for="selected-likes-input"
+                        class="text-xs font-semibold text-[#F5C451]"
+                      >
+                        Instagram Likes
+                      </label>
+                      <button
+                        type="button"
+                        id="clear-likes-btn"
+                        class="text-xs font-medium text-[#9E95BA] hover:text-white transition-colors"
+                      >
+                        Remove
+                      </button>
+                    </div>
+                    <div class="grid grid-cols-1 gap-2.5 sm:grid-cols-12">
+                      <div class="sm:col-span-8">
+                        <input
+                          id="selected-likes-input"
+                          name="selectedLikes"
+                          type="text"
+                          readonly
+                          value=""
+                          placeholder="No likes package selected"
+                          class="neon-input w-full rounded-xl px-3.5 py-2.5 text-sm font-semibold text-white placeholder:font-normal placeholder:text-[#7F759E] cursor-default"
+                        />
+                      </div>
+                      <div class="sm:col-span-4">
+                        <div
+                          class="flex h-[42px] items-center justify-between rounded-xl border border-purple-500/25 bg-[#120D20] px-2"
+                        >
+                          <button
+                            type="button"
+                            id="likes-qty-minus"
+                            aria-label="Decrease likes quantity"
+                            class="flex h-8 w-8 items-center justify-center rounded-lg text-base font-semibold text-[#C084FC] hover:bg-purple-500/15 hover:text-white transition-colors"
+                          >
+                            −
+                          </button>
+                          <span
+                            id="likes-qty-display"
+                            class="font-mono-num text-sm font-semibold text-white"
+                          >
+                            1x
+                          </span>
+                          <button
+                            type="button"
+                            id="likes-qty-plus"
+                            aria-label="Increase likes quantity"
+                            class="flex h-8 w-8 items-center justify-center rounded-lg text-base font-semibold text-[#C084FC] hover:bg-purple-500/15 hover:text-white transition-colors"
+                          >
+                            +
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <p id="package-error" class="hidden text-xs font-medium text-rose-400">
+                    Please select at least one Instagram Views or Likes package above first.
+                  </p>
+                </div>
+
+                <!-- Field 2: Instagram Post/Reel Link -->
+                <div>
+                  <div class="flex items-center justify-between gap-2">
+                    <label
+                      for="instagram-link-input"
+                      class="block text-sm font-semibold text-white"
+                    >
+                      Instagram Post / Reel Link
+                    </label>
+                    <button
+                      type="button"
+                      id="paste-link-btn"
+                      class="text-xs font-semibold text-[#F5C451] hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#F5C451] rounded px-1"
+                    >
+                      Paste Link
+                    </button>
+                  </div>
+                  <div class="mt-2">
+                    <input
+                      id="instagram-link-input"
+                      name="instagramLink"
+                      type="url"
+                      required
+                      autocomplete="off"
+                      spellcheck="false"
+                      placeholder="https://www.instagram.com/reel/..."
+                      aria-describedby="link-help link-error"
+                      class="neon-input w-full min-h-[46px] rounded-xl px-4 py-3 text-sm text-white placeholder:text-[#7F759E]"
+                    />
+                  </div>
+                  <p id="link-help" class="mt-1.5 text-xs text-[#B5ADD0]">
+                    Example: https://www.instagram.com/reel/C8xYz123AbC/ (account must be public)
+                  </p>
+                  <p id="link-error" class="mt-1.5 hidden text-xs font-medium text-rose-400"></p>
+                </div>
+
+                <!-- Payment Checkout Block: Custom QR Code, Aggregated Metrics, Payable Amount, UTR Input -->
+                <div
+                  id="payment-checkout-box"
+                  class="rounded-2xl border border-[#F5C451]/35 bg-[#0C0916] p-5"
+                >
+                  <div class="flex flex-wrap items-center justify-between gap-2 border-b border-purple-500/20 pb-3">
+                    <div>
+                      <p class="font-display text-base font-bold text-white">Payment Checkout</p>
+                      <p class="mt-0.5 text-xs text-[#B5ADD0]">
+                        Scan the QR code below with any UPI app, then enter your UTR number.
+                      </p>
+                    </div>
+                    <a
+                      href="https://ibb.co/Fk0fX9St"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      class="text-xs font-semibold text-[#C084FC] underline decoration-purple-400/40 underline-offset-4 hover:text-[#F5C451] whitespace-nowrap"
+                    >
+                      View Full QR
+                    </a>
+                  </div>
+
+                  <!-- Custom QR Code Image -->
+                  <div class="mt-5 flex flex-col items-center text-center">
+                    <div
+                      id="qr-frame"
+                      class="rounded-2xl border-2 border-[#F5C451]/70 bg-white p-3 shadow-[0_0_28px_-6px_rgba(245,196,81,0.3)]"
+                    >
+                      <img
+                        id="payment-qr-img"
+                        src="https://i.ibb.co/MyGjfbYL/IMG-20261116-220654.jpg"
+                        alt="UPI Payment QR Code"
+                        referrerpolicy="no-referrer"
+                        class="h-52 w-52 rounded-lg object-contain sm:h-56 sm:w-56"
+                        onerror="if (!this.dataset.triedFallback) { this.dataset.triedFallback = '1'; this.src = 'https://i.ibb.co/5XnzkdNV/IMG-20261116-220654.jpg'; } else { this.classList.add('hidden'); document.getElementById('qr-fallback').classList.remove('hidden'); }"
+                      />
+                      <div
+                        id="qr-fallback"
+                        class="hidden flex h-52 w-52 flex-col items-center justify-center rounded-lg bg-[#120D20] p-4 text-center text-xs text-[#D3CBE8] sm:h-56 sm:w-56"
+                      >
+                        <p class="font-semibold text-white">QR preview blocked</p>
+                        <p class="mt-1 text-[#B5ADD0]">Open the QR image directly below to scan.</p>
+                        <a
+                          href="https://ibb.co/Fk0fX9St"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          class="btn-gold mt-3 inline-flex rounded-lg px-3 py-1.5 text-xs font-bold"
+                        >
+                          Open QR Code
+                        </a>
+                      </div>
+                    </div>
+
+                    <!-- Separate Quantities & Combined Payable Amount Shown Below QR Image -->
+                    <div
+                      id="price-summary-box"
+                      class="mt-4 w-full rounded-xl border border-purple-500/25 bg-[#120D20] p-4"
+                    >
+                      <!-- Separate Views & Likes Quantities -->
+                      <div class="grid grid-cols-2 gap-3 border-b border-purple-500/20 pb-3 text-center">
+                        <div>
+                          <p class="text-[11px] font-medium text-[#B5ADD0]">Total Views</p>
+                          <p
+                            id="total-views-metric"
+                            class="font-mono-num mt-0.5 text-sm font-bold text-white"
+                          >
+                            0
+                          </p>
+                        </div>
+                        <div>
+                          <p class="text-[11px] font-medium text-[#B5ADD0]">Total Likes</p>
+                          <p
+                            id="total-likes-metric"
+                            class="font-mono-num mt-0.5 text-sm font-bold text-white"
+                          >
+                            0
+                          </p>
+                        </div>
+                      </div>
+
+                      <!-- Combined Payable Amount in ₹ -->
+                      <div class="pt-3">
+                        <p class="text-xs font-medium uppercase tracking-wider text-[#B5ADD0]">
+                          Total Payable Amount
+                        </p>
+                        <output
+                          id="total-price-output"
+                          for="selected-views-input selected-likes-input"
+                          class="font-mono-num mt-1 block text-3xl font-bold text-[#F5C451]"
+                        >
+                          ₹0
+                        </output>
+                        <p id="price-breakdown" class="mt-0.5 text-xs text-[#9E95BA]">
+                          Select a package to calculate total
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Transaction ID / UTR Number Input -->
+                  <div class="mt-5">
+                    <label
+                      for="utr-input"
+                      class="block text-sm font-semibold text-white"
+                    >
+                      Transaction ID / UTR Number
+                    </label>
+                    <div class="mt-2">
+                      <input
+                        id="utr-input"
+                        name="utrNumber"
+                        type="text"
+                        required
+                        autocomplete="off"
+                        spellcheck="false"
+                        placeholder="e.g. 432198765432 or UPI Ref ID"
+                        aria-describedby="utr-help utr-error"
+                        class="neon-input w-full min-h-[46px] rounded-xl px-4 py-3 text-sm font-mono-num text-white placeholder:font-sans placeholder:text-[#7F759E]"
+                      />
+                    </div>
+                    <p id="utr-help" class="mt-1.5 text-xs text-[#B5ADD0]">
+                      Enter the UTR / UPI transaction reference number shown after payment.
+                    </p>
+                    <p id="utr-error" class="mt-1.5 hidden text-xs font-medium text-rose-400"></p>
+                  </div>
+                </div>
+
+                <!-- Submit Button: Submit Order on WhatsApp -->
+                <button
+                  type="submit"
+                  id="order-submit-btn"
+                  class="btn-gold flex min-h-[52px] w-full items-center justify-center gap-2.5 rounded-xl px-6 py-3.5 text-base font-bold whitespace-nowrap"
+                >
+                  <svg
+                    class="h-5 w-5 shrink-0"
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                    aria-hidden="true"
+                  >
+                    <path
+                      d="M12.031 2c-5.516 0-9.969 4.453-9.969 9.969 0 1.766.469 3.484 1.344 5l-1.406 5.156 5.281-1.391c1.469.797 3.109 1.219 4.75 1.219 5.516 0 9.969-4.453 9.969-9.969S17.547 2 12.031 2zm5.813 14.125c-.25.703-1.438 1.344-2 1.422-.531.078-1.203.109-1.938-.125-.453-.141-1.031-.328-1.766-.641-3.094-1.344-5.109-4.469-5.266-4.672-.156-.203-1.266-1.688-1.266-3.219s.797-2.281 1.078-2.594c.281-.313.625-.391.828-.391s.406.016.594.016c.188 0 .438-.078.688.531.25.609.859 2.094.938 2.25.078.156.125.344.031.547-.094.203-.141.328-.297.5-.156.172-.313.391-.453.516-.156.141-.313.297-.141.594.172.297.766 1.266 1.641 2.047 1.125 1 2.078 1.313 2.375 1.469.297.156.469.125.641-.078.172-.203.75-.875.953-1.172.203-.297.406-.25.672-.156.266.094 1.719.813 2.016.953.297.141.484.219.563.344.078.125.078.719-.172 1.422z"
+                    />
+                  </svg>
+                  <span>Submit Order on WhatsApp</span>
+                </button>
+              </form>
+
+              <!-- Order Confirmation Receipt & WhatsApp Redirect Panel -->
+              <div
+                id="order-confirmation"
+                class="mt-5 hidden rounded-xl border border-emerald-400/40 bg-emerald-950/30 p-5"
+                role="status"
+                aria-live="polite"
+              >
+                <div class="flex flex-wrap items-center justify-between gap-2 border-b border-emerald-400/20 pb-3">
+                  <div>
+                    <p class="text-sm font-semibold text-emerald-300">
+                      Order Ready — Sending to WhatsApp
+                    </p>
+                    <p id="receipt-order-id" class="font-mono-num mt-0.5 text-xs text-[#D3CBE8]">
+                      Order #AR-00000
+                    </p>
+                  </div>
+                  <span class="font-mono-num text-lg font-bold text-[#F5C451]" id="receipt-total">
+                    ₹0
+                  </span>
+                </div>
+
+                <dl class="mt-3 space-y-2 text-xs">
+                  <div class="flex items-start justify-between gap-4">
+                    <dt class="text-[#B5ADD0]">Service</dt>
+                    <dd id="receipt-service" class="text-right font-semibold text-white"></dd>
+                  </div>
+                  <div class="flex items-start justify-between gap-4">
+                    <dt class="text-[#B5ADD0]">Instagram Link</dt>
+                    <dd
+                      id="receipt-link"
+                      class="max-w-[260px] truncate text-right font-medium text-[#C084FC]"
+                    ></dd>
+                  </div>
+                  <div class="flex items-start justify-between gap-4">
+                    <dt class="text-[#B5ADD0]">Transaction ID / UTR</dt>
+                    <dd id="receipt-utr" class="font-mono-num text-right font-semibold text-white"></dd>
+                  </div>
+                </dl>
+
+                <div class="mt-4 flex flex-wrap items-center gap-3">
+                  <a
+                    id="whatsapp-direct-anchor"
+                    href="https://wa.me/918116443663"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="btn-gold inline-flex min-h-[40px] items-center justify-center rounded-lg px-4 py-2 text-xs font-bold whitespace-nowrap"
+                  >
+                    Open WhatsApp Chat
+                  </a>
+                  <button
+                    type="button"
+                    id="copy-order-btn"
+                    class="inline-flex min-h-[40px] items-center justify-center rounded-lg border border-purple-500/30 bg-[#140F24] px-4 py-2 text-xs font-semibold text-white hover:border-[#F5C451]/60 whitespace-nowrap"
+                  >
+                    Copy Details
+                  </button>
+                  <button
+                    type="button"
+                    id="new-order-btn"
+                    class="inline-flex min-h-[40px] items-center justify-center rounded-lg border border-purple-500/30 bg-[#140F24] px-4 py-2 text-xs font-semibold text-white hover:border-[#F5C451]/60 whitespace-nowrap"
+                  >
+                    New Order
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right Column: How It Works & Recent Orders -->
+          <div id="how-it-works" class="lg:col-span-5">
+            <div
+              class="flex h-full flex-col justify-between rounded-2xl border border-purple-500/25 bg-[#120D20] p-6 sm:p-8"
+            >
+              <div>
+                <h3 class="font-display text-xl font-bold text-white">How Ordering Works</h3>
+                <p class="mt-1.5 text-sm text-[#B5ADD0]">
+                  Simple 3-step checkout with zero account login required.
+                </p>
+
+                <ol class="mt-6 space-y-5">
+                  <li class="border-b border-purple-500/15 pb-4">
+                    <p class="font-display text-base font-bold text-white">
+                      01. Pick Views, Likes, or Both
+                    </p>
+                    <p class="mt-1 text-sm leading-relaxed text-[#B5ADD0]">
+                      Select any tier from Instagram Views (₹3–₹110) and/or Instagram Likes (₹5–₹10).
+                      The combined payable amount updates automatically.
+                    </p>
+                  </li>
+                  <li class="border-b border-purple-500/15 pb-4">
+                    <p class="font-display text-base font-bold text-white">
+                      02. Paste a Public Instagram URL
+                    </p>
+                    <p class="mt-1 text-sm leading-relaxed text-[#B5ADD0]">
+                      Copy the link from Instagram using Share &rarr; Copy Link. Make sure the
+                      account is public while delivery runs.
+                    </p>
+                  </li>
+                  <li>
+                    <p class="font-display text-base font-bold text-white">
+                      03. Scan QR, Enter UTR &amp; Submit
+                    </p>
+                    <p class="mt-1 text-sm leading-relaxed text-[#B5ADD0]">
+                      Pay the displayed ₹ amount via the UPI QR code, enter your Transaction ID /
+                      UTR number, and click Submit Order on WhatsApp.
+                    </p>
+                  </li>
+                </ol>
+              </div>
+
+              <!-- Recent Orders History (persisted in localStorage) -->
+              <div
+                id="recent-orders-panel"
+                class="mt-8 rounded-xl border border-purple-500/20 bg-[#0C0916] p-4"
+              >
+                <div class="flex items-center justify-between gap-2">
+                  <p class="text-xs font-semibold text-[#F5C451]">Recent Orders</p>
+                  <button
+                    type="button"
+                    id="clear-history-btn"
+                    class="hidden text-xs font-medium text-[#9E95BA] hover:text-white transition-colors"
+                  >
+                    Clear
+                  </button>
+                </div>
+                <div id="recent-orders-list" class="mt-2.5 space-y-2 text-xs text-[#B5ADD0]">
+                  <p>No orders placed in this browser yet.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Quiet Footer -->
+    <footer class="relative z-10 mt-6 border-t border-purple-500/20 bg-[#07050C]">
+      <div class="mx-auto max-w-6xl px-4 py-8 text-xs text-[#9E95BA] sm:px-6">
+        <div class="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
+          <div class="flex flex-wrap items-center gap-3">
+            <span class="font-display text-base font-bold text-white">
+              Aura<span class="text-[#F5C451]">Reach</span>
+            </span>
+            <span aria-hidden="true">·</span>
+            <span>Public Instagram links only · No passwords requested</span>
+          </div>
+          <div class="flex items-center gap-6 font-medium">
+            <a href="#views-section" class="hover:text-white transition-colors">Views</a>
+            <a href="#likes-section" class="hover:text-white transition-colors">Likes</a>
+            <a href="#order-form" class="hover:text-white transition-colors">Order Form</a>
+          </div>
+        </div>
+        <div class="mt-5 border-t border-purple-500/15 pt-4 text-center sm:text-left">
+          <p class="text-xs font-medium text-[#B5ADD0]">
+            Developed &amp; Managed by
+            <span class="font-semibold text-[#F5C451]">Ankit Das</span>
+          </p>
+        </div>
+      </div>
+    </footer>
+
+    <!-- Referral Reward Pop-up Modal (Before Entering App & After Payment Completion) -->
+    <div
+      id="referral-modal"
+      class="fixed inset-0 z-50 flex items-center justify-center bg-[#050309]/85 p-4 backdrop-blur-md"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="referral-title"
+      aria-describedby="referral-desc"
+    >
+      <div
+        id="referral-modal-card"
+        class="relative w-full max-w-lg rounded-2xl border border-[#F5C451]/45 bg-[#120D20] p-6 sm:p-7 shadow-[0_24px_60px_-15px_rgba(168,85,247,0.5)]"
+      >
+        <button
+          type="button"
+          id="referral-close-btn"
+          aria-label="Close pop-up"
+          class="absolute right-4 top-4 flex h-10 w-10 items-center justify-center rounded-xl border border-purple-500/25 bg-[#0C0916] text-lg font-semibold text-[#B5ADD0] hover:border-[#F5C451]/60 hover:text-white transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#F5C451]"
+        >
+          &times;
+        </button>
+
+        <p id="referral-kicker" class="pr-10 text-xs font-semibold text-[#F5C451]">
+          Referral Offer <span aria-hidden="true">·</span> 10,000 Free Views Each
+        </p>
+
+        <h2
+          id="referral-title"
+          class="font-display headline-balance mt-2 pr-8 text-2xl font-bold tracking-tight text-white"
+        >
+          Share &amp; Earn 10,000 Free Views Each
+        </h2>
+
+        <div
+          id="referral-postpay-banner"
+          class="mt-4 hidden rounded-xl border border-emerald-400/35 bg-emerald-950/30 px-4 py-3 text-xs text-emerald-200"
+        >
+          <p class="font-semibold text-emerald-300">Payment Details &amp; UTR Recorded</p>
+          <p id="referral-order-summary" class="mt-0.5 text-[#D3CBE8]"></p>
+        </div>
+
+        <div id="referral-desc" class="mt-4 space-y-3 text-sm leading-relaxed text-[#D3CBE8]">
+          <div class="rounded-xl border border-purple-500/25 bg-[#0C0916] p-4">
+            <p class="font-semibold text-white">
+              10,000 Free Views for You &amp; Your Friend
+            </p>
+            <p class="mt-1 text-xs leading-relaxed text-[#B5ADD0] sm:text-sm">
+              If you share this app with someone and that person makes a payment through it,
+              <strong class="text-[#F5C451]">both you and that person will each receive 10,000 free views</strong>.
+            </p>
+          </div>
+
+          <div class="rounded-xl border border-[#F5C451]/30 bg-[#0C0916] p-4">
+            <p class="font-semibold text-white">
+              Important WhatsApp Referral Rule
+            </p>
+            <p class="mt-1 text-xs leading-relaxed text-[#B5ADD0] sm:text-sm">
+              The person you share it with must mention
+              <strong class="text-white">your name</strong> and
+              <strong class="text-white">your phone number (the referrer's number)</strong>
+              via WhatsApp when submitting their order so both rewards can be credited.
+            </p>
+          </div>
+        </div>
+
+        <div class="mt-6 flex flex-col gap-2.5 sm:flex-row sm:flex-wrap sm:items-center">
+          <a
+            id="referral-whatsapp-btn"
+            href="https://wa.me/918116443663"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="btn-gold hidden min-h-[44px] flex-1 items-center justify-center gap-2 rounded-xl px-5 py-2.5 text-sm font-bold whitespace-nowrap"
+          >
+            Send Order on WhatsApp
+          </a>
+          <button
+            type="button"
+            id="referral-enter-btn"
+            class="btn-gold inline-flex min-h-[44px] flex-1 items-center justify-center rounded-xl px-5 py-2.5 text-sm font-bold whitespace-nowrap"
+          >
+            Enter App
+          </button>
+          <button
+            type="button"
+            id="referral-copy-btn"
+            class="inline-flex min-h-[44px] items-center justify-center rounded-xl border border-purple-500/35 bg-[#0C0916] px-4 py-2.5 text-xs font-semibold text-white hover:border-[#F5C451]/60 transition-colors whitespace-nowrap"
+          >
+            Copy Share Message
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Self-Contained Application Logic -->
+    <script>
+      (function () {
+        'use strict';
+
+        const STORAGE_KEY = 'aurareach_recent_orders_v2';
+        const WHATSAPP_PHONE = '918116443663';
+
+        const state = {
+          viewsPackage: {
+            id: 'views-50k',
+            group: 'views',
+            category: 'Instagram Views',
+            name: '50K Views',
+            count: 50000,
+            price: 20,
+          },
+          viewsQty: 1,
+          likesPackage: {
+            id: 'likes-1k',
+            group: 'likes',
+            category: 'Instagram Likes',
+            name: '1K Likes',
+            count: 1000,
+            price: 10,
+          },
+          likesQty: 1,
+          activeFilter: 'all',
+          lastReceiptText: '',
+        };
+
+        const packageCards = Array.from(document.querySelectorAll('.package-card'));
+        const filterTabs = Array.from(document.querySelectorAll('.filter-tab'));
+        const categoryBlocks = Array.from(document.querySelectorAll('[data-category-block]'));
+
+        const barViewsLabel = document.getElementById('bar-views-label');
+        const barLikesLabel = document.getElementById('bar-likes-label');
+        const barTotalPrice = document.getElementById('bar-total-price');
+
+        const checkoutForm = document.getElementById('checkout-form');
+        const selectedViewsInput = document.getElementById('selected-views-input');
+        const selectedLikesInput = document.getElementById('selected-likes-input');
+        const clearViewsBtn = document.getElementById('clear-views-btn');
+        const clearLikesBtn = document.getElementById('clear-likes-btn');
+        const viewsQtyMinusBtn = document.getElementById('views-qty-minus');
+        const viewsQtyPlusBtn = document.getElementById('views-qty-plus');
+        const viewsQtyDisplay = document.getElementById('views-qty-display');
+        const likesQtyMinusBtn = document.getElementById('likes-qty-minus');
+        const likesQtyPlusBtn = document.getElementById('likes-qty-plus');
+        const likesQtyDisplay = document.getElementById('likes-qty-display');
+
+        const instagramLinkInput = document.getElementById('instagram-link-input');
+        const utrInput = document.getElementById('utr-input');
+        const pasteLinkBtn = document.getElementById('paste-link-btn');
+
+        const totalViewsMetric = document.getElementById('total-views-metric');
+        const totalLikesMetric = document.getElementById('total-likes-metric');
+        const totalPriceOutput = document.getElementById('total-price-output');
+        const priceBreakdown = document.getElementById('price-breakdown');
+        const priceSummaryBox = document.getElementById('price-summary-box');
+
+        const packageError = document.getElementById('package-error');
+        const linkError = document.getElementById('link-error');
+        const utrError = document.getElementById('utr-error');
+
+        const orderConfirmation = document.getElementById('order-confirmation');
+        const receiptOrderId = document.getElementById('receipt-order-id');
+        const receiptTotal = document.getElementById('receipt-total');
+        const receiptService = document.getElementById('receipt-service');
+        const receiptLink = document.getElementById('receipt-link');
+        const receiptUtr = document.getElementById('receipt-utr');
+        const whatsappDirectAnchor = document.getElementById('whatsapp-direct-anchor');
+        const copyOrderBtn = document.getElementById('copy-order-btn');
+        const newOrderBtn = document.getElementById('new-order-btn');
+
+        const recentOrdersList = document.getElementById('recent-orders-list');
+        const clearHistoryBtn = document.getElementById('clear-history-btn');
+
+        const referralModal = document.getElementById('referral-modal');
+        const referralCloseBtn = document.getElementById('referral-close-btn');
+        const referralKicker = document.getElementById('referral-kicker');
+        const referralTitle = document.getElementById('referral-title');
+        const referralPostpayBanner = document.getElementById('referral-postpay-banner');
+        const referralOrderSummary = document.getElementById('referral-order-summary');
+        const referralWhatsappBtn = document.getElementById('referral-whatsapp-btn');
+        const referralEnterBtn = document.getElementById('referral-enter-btn');
+        const referralCopyBtn = document.getElementById('referral-copy-btn');
+
+        function formatRupees(amount) {
+          return '₹' + amount.toLocaleString('en-IN');
+        }
+
+        function formatCount(count) {
+          return count.toLocaleString('en-IN');
+        }
+
+        function generateOrderId() {
+          const num = Math.floor(10000 + Math.random() * 90000);
+          return 'AR-' + num;
+        }
+
+        function loadRecentOrders() {
+          try {
+            const raw = localStorage.getItem(STORAGE_KEY);
+            return raw ? JSON.parse(raw) : [];
+          } catch (_err) {
+            return [];
+          }
+        }
+
+        function saveRecentOrder(order) {
+          try {
+            const existing = loadRecentOrders();
+            const updated = [order].concat(existing).slice(0, 4);
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
+          } catch (_err) {
+            // Storage unavailable
+          }
+        }
+
+        function renderRecentOrders() {
+          const orders = loadRecentOrders();
+          recentOrdersList.innerHTML = '';
+
+          if (!orders.length) {
+            clearHistoryBtn.classList.add('hidden');
+            const empty = document.createElement('p');
+            empty.textContent = 'No orders placed in this browser yet.';
+            recentOrdersList.appendChild(empty);
+            return;
+          }
+
+          clearHistoryBtn.classList.remove('hidden');
+          orders.forEach(function (order) {
+            const row = document.createElement('div');
+            row.className =
+              'flex items-center justify-between gap-3 rounded-lg border border-purple-500/15 bg-[#120D20] px-3 py-2';
+
+            const left = document.createElement('div');
+            left.className = 'min-w-0';
+
+            const title = document.createElement('p');
+            title.className = 'truncate font-semibold text-white';
+            title.textContent = '#' + order.id + ' · ' + order.service;
+
+            const link = document.createElement('p');
+            link.className = 'truncate text-[11px] text-[#9E95BA]';
+            link.textContent = order.link;
+
+            left.appendChild(title);
+            left.appendChild(link);
+
+            const price = document.createElement('span');
+            price.className = 'font-mono-num shrink-0 font-bold text-[#F5C451]';
+            price.textContent = formatRupees(order.total);
+
+            row.appendChild(left);
+            row.appendChild(price);
+            recentOrdersList.appendChild(row);
+          });
+        }
+
+        function computeTotals() {
+          const viewsCount = state.viewsPackage ? state.viewsPackage.count * state.viewsQty : 0;
+          const likesCount = state.likesPackage ? state.likesPackage.count * state.likesQty : 0;
+
+          const viewsPrice = state.viewsPackage ? state.viewsPackage.price * state.viewsQty : 0;
+          const likesPrice = state.likesPackage ? state.likesPackage.price * state.likesQty : 0;
+          const totalPrice = viewsPrice + likesPrice;
+
+          return {
+            viewsCount: viewsCount,
+            likesCount: likesCount,
+            viewsPrice: viewsPrice,
+            likesPrice: likesPrice,
+            totalPrice: totalPrice,
+          };
+        }
+
+        function updateFormSummary(animate) {
+          const totals = computeTotals();
+          viewsQtyDisplay.textContent = state.viewsQty + 'x';
+          likesQtyDisplay.textContent = state.likesQty + 'x';
+
+          if (state.viewsPackage) {
+            const vPkg = state.viewsPackage;
+            selectedViewsInput.value =
+              vPkg.name + ' (' + formatRupees(vPkg.price) + ')';
+            barViewsLabel.textContent =
+              state.viewsQty > 1 ? state.viewsQty + '× ' + vPkg.name : vPkg.name;
+            clearViewsBtn.classList.remove('hidden');
+          } else {
+            selectedViewsInput.value = '';
+            barViewsLabel.textContent = 'None';
+            clearViewsBtn.classList.add('hidden');
+          }
+
+          if (state.likesPackage) {
+            const lPkg = state.likesPackage;
+            selectedLikesInput.value =
+              lPkg.name + ' (' + formatRupees(lPkg.price) + ')';
+            barLikesLabel.textContent =
+              state.likesQty > 1 ? state.likesQty + '× ' + lPkg.name : lPkg.name;
+            clearLikesBtn.classList.remove('hidden');
+          } else {
+            selectedLikesInput.value = '';
+            barLikesLabel.textContent = 'None';
+            clearLikesBtn.classList.add('hidden');
+          }
+
+          totalViewsMetric.textContent = formatCount(totals.viewsCount);
+          totalLikesMetric.textContent = formatCount(totals.likesCount);
+
+          totalPriceOutput.textContent = formatRupees(totals.totalPrice);
+          barTotalPrice.textContent = formatRupees(totals.totalPrice);
+
+          const parts = [];
+          if (state.viewsPackage) {
+            parts.push(
+              (state.viewsQty > 1 ? state.viewsQty + '× ' : '') +
+                state.viewsPackage.name +
+                ' (' +
+                formatRupees(totals.viewsPrice) +
+                ')'
+            );
+          }
+          if (state.likesPackage) {
+            parts.push(
+              (state.likesQty > 1 ? state.likesQty + '× ' : '') +
+                state.likesPackage.name +
+                ' (' +
+                formatRupees(totals.likesPrice) +
+                ')'
+            );
+          }
+
+          priceBreakdown.textContent = parts.length
+            ? parts.join(' + ')
+            : 'Select at least one package above to calculate total';
+
+          if (parts.length) {
+            packageError.classList.add('hidden');
+            selectedViewsInput.removeAttribute('aria-invalid');
+            selectedLikesInput.removeAttribute('aria-invalid');
+          }
+
+          if (animate) {
+            priceSummaryBox.classList.remove('animate-summary-pop');
+            void priceSummaryBox.offsetWidth;
+            priceSummaryBox.classList.add('animate-summary-pop');
+          }
+        }
+
+        function syncCardStates() {
+          packageCards.forEach(function (card) {
+            const group = card.dataset.group;
+            const activePkg = group === 'views' ? state.viewsPackage : state.likesPackage;
+            const isMatch = activePkg && card.dataset.id === activePkg.id;
+            const actionLabel = card.querySelector('.card-action-label');
+
+            card.classList.toggle('is-selected', Boolean(isMatch));
+            card.setAttribute('aria-pressed', isMatch ? 'true' : 'false');
+            if (actionLabel) {
+              actionLabel.textContent = isMatch
+                ? '✓ Selected (' + card.dataset.name + ')'
+                : 'Select ' + card.dataset.name;
+            }
+          });
+        }
+
+        function togglePackageFromCard(card) {
+          const group = card.dataset.group;
+          const nextPkg = {
+            id: card.dataset.id,
+            group: group,
+            category: card.dataset.category,
+            name: card.dataset.name,
+            count: Number(card.dataset.count),
+            price: Number(card.dataset.price),
+          };
+
+          if (group === 'views') {
+            if (state.viewsPackage && state.viewsPackage.id === nextPkg.id) {
+              state.viewsPackage = null;
+            } else {
+              state.viewsPackage = nextPkg;
+            }
+          } else {
+            if (state.likesPackage && state.likesPackage.id === nextPkg.id) {
+              state.likesPackage = null;
+            } else {
+              state.likesPackage = nextPkg;
+            }
+          }
+
+          syncCardStates();
+          updateFormSummary(true);
+          orderConfirmation.classList.add('hidden');
+        }
+
+        function applyCategoryFilter(filterKey) {
+          state.activeFilter = filterKey;
+
+          filterTabs.forEach(function (tab) {
+            const isActive = tab.dataset.filter === filterKey;
+            tab.setAttribute('aria-selected', isActive ? 'true' : 'false');
+            tab.classList.toggle('bg-[#A855F7]', isActive);
+            tab.classList.toggle('text-white', isActive);
+            tab.classList.toggle('text-[#B5ADD0]', !isActive);
+          });
+
+          categoryBlocks.forEach(function (block) {
+            const blockKey = block.dataset.categoryBlock;
+            const shouldShow = filterKey === 'all' || filterKey === blockKey;
+            block.classList.toggle('hidden', !shouldShow);
+          });
+        }
+
+        function normalizeAndValidateInstagramUrl(rawValue) {
+          const trimmed = rawValue.trim();
+          if (!trimmed) {
+            return {
+              valid: false,
+              message: 'Please enter your Instagram Post or Reel link.',
+            };
+          }
+
+          const candidate = /^https?:\/\//i.test(trimmed) ? trimmed : 'https://' + trimmed;
+          let parsed;
+          try {
+            parsed = new URL(candidate);
+          } catch (_err) {
+            return {
+              valid: false,
+              message: 'Enter a valid URL (e.g. https://www.instagram.com/reel/...).',
+            };
+          }
+
+          const hostname = parsed.hostname.toLowerCase();
+          const isInstagramHost =
+            hostname === 'instagram.com' ||
+            hostname.endsWith('.instagram.com') ||
+            hostname === 'instagr.am' ||
+            hostname.endsWith('.instagr.am');
+
+          if (!isInstagramHost) {
+            return {
+              valid: false,
+              message: 'Link must be an Instagram URL (instagram.com or instagr.am).',
+            };
+          }
+
+          if (!parsed.pathname || parsed.pathname === '/') {
+            return {
+              valid: false,
+              message: 'Please paste the direct link to your Instagram Post or Reel.',
+            };
+          }
+
+          return {
+            valid: true,
+            normalizedUrl: parsed.toString(),
+          };
+        }
+
+        function clearLinkError() {
+          linkError.textContent = '';
+          linkError.classList.add('hidden');
+          instagramLinkInput.removeAttribute('aria-invalid');
+        }
+
+        function showLinkError(message) {
+          linkError.textContent = message;
+          linkError.classList.remove('hidden');
+          instagramLinkInput.setAttribute('aria-invalid', 'true');
+        }
+
+        function clearUtrError() {
+          utrError.textContent = '';
+          utrError.classList.add('hidden');
+          utrInput.removeAttribute('aria-invalid');
+        }
+
+        function showUtrError(message) {
+          utrError.textContent = message;
+          utrError.classList.remove('hidden');
+          utrInput.setAttribute('aria-invalid', 'true');
+        }
+
+        function validateUtrNumber(rawValue) {
+          const trimmed = rawValue.trim();
+          if (!trimmed) {
+            return {
+              valid: false,
+              message: 'Please enter your Transaction ID / UTR Number after paying.',
+            };
+          }
+          if (!/^[A-Za-z0-9_-]{6,40}$/.test(trimmed)) {
+            return {
+              valid: false,
+              message: 'Enter a valid Transaction ID / UTR Number (at least 6 letters or digits).',
+            };
+          }
+          return {
+            valid: true,
+            utr: trimmed,
+          };
+        }
+
+        // Bind Package Card Clicks
+        packageCards.forEach(function (card) {
+          card.addEventListener('click', function () {
+            togglePackageFromCard(card);
+          });
+        });
+
+        // Bind Filter Tabs
+        filterTabs.forEach(function (tab) {
+          tab.addEventListener('click', function () {
+            applyCategoryFilter(tab.dataset.filter || 'all');
+          });
+        });
+
+        // Clear Views / Likes buttons
+        clearViewsBtn.addEventListener('click', function () {
+          state.viewsPackage = null;
+          state.viewsQty = 1;
+          syncCardStates();
+          updateFormSummary(true);
+          orderConfirmation.classList.add('hidden');
+        });
+
+        clearLikesBtn.addEventListener('click', function () {
+          state.likesPackage = null;
+          state.likesQty = 1;
+          syncCardStates();
+          updateFormSummary(true);
+          orderConfirmation.classList.add('hidden');
+        });
+
+        // Views Quantity Stepper
+        viewsQtyMinusBtn.addEventListener('click', function () {
+          if (state.viewsQty > 1) {
+            state.viewsQty -= 1;
+            updateFormSummary(true);
+            orderConfirmation.classList.add('hidden');
+          }
+        });
+
+        viewsQtyPlusBtn.addEventListener('click', function () {
+          if (state.viewsQty < 10) {
+            state.viewsQty += 1;
+            updateFormSummary(true);
+            orderConfirmation.classList.add('hidden');
+          }
+        });
+
+        // Likes Quantity Stepper
+        likesQtyMinusBtn.addEventListener('click', function () {
+          if (state.likesQty > 1) {
+            state.likesQty -= 1;
+            updateFormSummary(true);
+            orderConfirmation.classList.add('hidden');
+          }
+        });
+
+        likesQtyPlusBtn.addEventListener('click', function () {
+          if (state.likesQty < 10) {
+            state.likesQty += 1;
+            updateFormSummary(true);
+            orderConfirmation.classList.add('hidden');
+          }
+        });
+
+        // Paste Link Helper
+        if (pasteLinkBtn) {
+          pasteLinkBtn.addEventListener('click', async function () {
+            if (!navigator.clipboard || !navigator.clipboard.readText) {
+              instagramLinkInput.focus();
+              return;
+            }
+            try {
+              const text = await navigator.clipboard.readText();
+              if (text) {
+                instagramLinkInput.value = text.trim();
+                clearLinkError();
+                instagramLinkInput.focus();
+              }
+            } catch (_err) {
+              instagramLinkInput.focus();
+            }
+          });
+        }
+
+        // Live clear error when typing
+        instagramLinkInput.addEventListener('input', function () {
+          if (instagramLinkInput.getAttribute('aria-invalid') === 'true') {
+            clearLinkError();
+          }
+        });
+
+        utrInput.addEventListener('input', function () {
+          if (utrInput.getAttribute('aria-invalid') === 'true') {
+            clearUtrError();
+          }
+        });
+
+        // Form Submission & WhatsApp Checkout with Combined Order Details + UTR Number
+        checkoutForm.addEventListener('submit', function (event) {
+          event.preventDefault();
+
+          if (!state.viewsPackage && !state.likesPackage) {
+            packageError.classList.remove('hidden');
+            selectedViewsInput.setAttribute('aria-invalid', 'true');
+            selectedLikesInput.setAttribute('aria-invalid', 'true');
+            document.getElementById('packages').scrollIntoView({ behavior: 'smooth' });
+            return;
+          }
+
+          const urlResult = normalizeAndValidateInstagramUrl(instagramLinkInput.value);
+          if (!urlResult.valid) {
+            showLinkError(urlResult.message);
+            instagramLinkInput.focus();
+            return;
+          }
+          clearLinkError();
+          instagramLinkInput.value = urlResult.normalizedUrl;
+
+          const utrResult = validateUtrNumber(utrInput.value);
+          if (!utrResult.valid) {
+            showUtrError(utrResult.message);
+            utrInput.focus();
+            return;
+          }
+          clearUtrError();
+          utrInput.value = utrResult.utr;
+
+          const totals = computeTotals();
+          const orderId = generateOrderId();
+
+          const serviceItems = [];
+          if (state.viewsPackage) {
+            serviceItems.push(
+              (state.viewsQty > 1 ? state.viewsQty + 'x ' : '') +
+                state.viewsPackage.name +
+                ' (' +
+                formatRupees(totals.viewsPrice) +
+                ')'
+            );
+          }
+          if (state.likesPackage) {
+            serviceItems.push(
+              (state.likesQty > 1 ? state.likesQty + 'x ' : '') +
+                state.likesPackage.name +
+                ' (' +
+                formatRupees(totals.likesPrice) +
+                ')'
+            );
+          }
+          const serviceLabel = serviceItems.join(' + ');
+
+          const whatsappMessage = [
+            'Hello! I have completed payment for my Instagram growth order:',
+            '',
+            'Order ID: #' + orderId,
+            'Services: ' + serviceLabel,
+            'Total Amount: ' + formatRupees(totals.totalPrice),
+            'Instagram Link: ' + urlResult.normalizedUrl,
+            'Transaction ID / UTR: ' + utrResult.utr,
+          ].join('\n');
+
+          const whatsappUrl =
+            'https://wa.me/' + WHATSAPP_PHONE + '?text=' + encodeURIComponent(whatsappMessage);
+
+          receiptOrderId.textContent = 'Order #' + orderId;
+          receiptTotal.textContent = formatRupees(totals.totalPrice);
+          receiptService.textContent = serviceLabel;
+          receiptLink.textContent = urlResult.normalizedUrl;
+          receiptUtr.textContent = utrResult.utr;
+          whatsappDirectAnchor.href = whatsappUrl;
+          state.lastReceiptText = whatsappMessage;
+
+          orderConfirmation.classList.remove('hidden');
+
+          saveRecentOrder({
+            id: orderId,
+            service: serviceLabel,
+            total: totals.totalPrice,
+            link: urlResult.normalizedUrl,
+            utr: utrResult.utr,
+          });
+          renderRecentOrders();
+
+          // Show post-payment referral pop-up and automatically redirect to WhatsApp
+          openReferralModal('post-payment', {
+            orderId: orderId,
+            serviceLabel: serviceLabel,
+            totalPrice: totals.totalPrice,
+            whatsappUrl: whatsappUrl,
+          });
+
+          if (window.self === window.top) {
+            scheduleWhatsappRedirect(whatsappUrl, serviceLabel, totals.totalPrice);
+          } else {
+            whatsappDirectAnchor.click();
+          }
+        });
+
+        let whatsappRedirectTimer = null;
+        let whatsappCountdownInterval = null;
+
+        function clearWhatsappRedirectTimers() {
+          if (whatsappRedirectTimer) {
+            clearTimeout(whatsappRedirectTimer);
+            whatsappRedirectTimer = null;
+          }
+          if (whatsappCountdownInterval) {
+            clearInterval(whatsappCountdownInterval);
+            whatsappCountdownInterval = null;
+          }
+        }
+
+        function scheduleWhatsappRedirect(whatsappUrl, serviceLabel, totalPrice) {
+          clearWhatsappRedirectTimers();
+          let secondsLeft = 2;
+          const baseText = serviceLabel + ' · Total ' + formatRupees(totalPrice);
+          referralOrderSummary.textContent =
+            baseText + ' · Redirecting to WhatsApp in ' + secondsLeft + 's...';
+
+          whatsappCountdownInterval = setInterval(function () {
+            secondsLeft -= 1;
+            if (secondsLeft > 0) {
+              referralOrderSummary.textContent =
+                baseText + ' · Redirecting to WhatsApp in ' + secondsLeft + 's...';
+            } else {
+              referralOrderSummary.textContent = baseText + ' · Redirecting to WhatsApp...';
+              clearInterval(whatsappCountdownInterval);
+              whatsappCountdownInterval = null;
+            }
+          }, 1000);
+
+          whatsappRedirectTimer = setTimeout(function () {
+            clearWhatsappRedirectTimers();
+            window.location.href = whatsappUrl;
+          }, 2000);
+        }
+
+        function openReferralModal(mode, details) {
+          clearWhatsappRedirectTimers();
+
+          if (mode === 'post-payment' && details) {
+            referralKicker.textContent = 'Payment Completed · Order #' + details.orderId;
+            referralTitle.textContent = 'Claim 10,000 Free Views by Sharing';
+            referralOrderSummary.textContent =
+              details.serviceLabel +
+              ' · Total ' +
+              formatRupees(details.totalPrice) +
+              ' · Opening WhatsApp...';
+            referralPostpayBanner.classList.remove('hidden');
+
+            referralWhatsappBtn.href = details.whatsappUrl;
+            referralWhatsappBtn.classList.remove('hidden');
+            referralWhatsappBtn.classList.add('inline-flex');
+
+            referralEnterBtn.textContent = 'Close';
+            referralEnterBtn.classList.remove('btn-gold');
+            referralEnterBtn.classList.add(
+              'border',
+              'border-purple-500/35',
+              'bg-[#0C0916]',
+              'text-white',
+              'hover:border-[#F5C451]/60'
+            );
+          } else {
+            referralKicker.textContent = 'Referral Offer · 10,000 Free Views Each';
+            referralTitle.textContent = 'Share & Earn 10,000 Free Views Each';
+            referralPostpayBanner.classList.add('hidden');
+
+            referralWhatsappBtn.classList.add('hidden');
+            referralWhatsappBtn.classList.remove('inline-flex');
+
+            referralEnterBtn.textContent = 'Enter App';
+            referralEnterBtn.classList.add('btn-gold');
+            referralEnterBtn.classList.remove(
+              'border',
+              'border-purple-500/35',
+              'bg-[#0C0916]',
+              'text-white',
+              'hover:border-[#F5C451]/60'
+            );
+          }
+
+          referralModal.classList.remove('hidden');
+          document.body.classList.add('overflow-hidden');
+
+          if (mode === 'post-payment') {
+            referralWhatsappBtn.focus();
+          } else {
+            referralEnterBtn.focus();
+          }
+        }
+
+        function closeReferralModal() {
+          clearWhatsappRedirectTimers();
+          referralModal.classList.add('hidden');
+          document.body.classList.remove('overflow-hidden');
+        }
+
+        referralWhatsappBtn.addEventListener('click', clearWhatsappRedirectTimers);
+        referralCloseBtn.addEventListener('click', closeReferralModal);
+        referralEnterBtn.addEventListener('click', closeReferralModal);
+
+        referralModal.addEventListener('click', function (event) {
+          if (event.target === referralModal) {
+            closeReferralModal();
+          }
+        });
+
+        document.addEventListener('keydown', function (event) {
+          if (event.key === 'Escape' && !referralModal.classList.contains('hidden')) {
+            closeReferralModal();
+          }
+        });
+
+        referralCopyBtn.addEventListener('click', async function () {
+          const shareText = [
+            'Check out this Instagram Views & Likes storefront: ' + window.location.href,
+            'If you make a payment through it, we both get 10,000 free views each!',
+            'Just remember to mention my name and phone number on WhatsApp when submitting your order.',
+          ].join('\n');
+
+          if (!navigator.clipboard || !navigator.clipboard.writeText) {
+            return;
+          }
+          try {
+            await navigator.clipboard.writeText(shareText);
+            referralCopyBtn.textContent = 'Share Message Copied';
+            setTimeout(function () {
+              referralCopyBtn.textContent = 'Copy Share Message';
+            }, 1800);
+          } catch (_err) {
+            // Clipboard permission denied
+          }
+        });
+
+        // Copy details button
+        copyOrderBtn.addEventListener('click', async function () {
+          if (!state.lastReceiptText || !navigator.clipboard || !navigator.clipboard.writeText) {
+            return;
+          }
+          try {
+            await navigator.clipboard.writeText(state.lastReceiptText);
+            copyOrderBtn.textContent = 'Copied';
+            setTimeout(function () {
+              copyOrderBtn.textContent = 'Copy Details';
+            }, 1800);
+          } catch (_err) {
+            // Clipboard permission denied
+          }
+        });
+
+        // New Order reset button
+        newOrderBtn.addEventListener('click', function () {
+          instagramLinkInput.value = '';
+          utrInput.value = '';
+          state.viewsQty = 1;
+          state.likesQty = 1;
+          clearLinkError();
+          clearUtrError();
+          updateFormSummary(false);
+          orderConfirmation.classList.add('hidden');
+          instagramLinkInput.focus();
+        });
+
+        // Clear recent orders history
+        clearHistoryBtn.addEventListener('click', function () {
+          try {
+            localStorage.removeItem(STORAGE_KEY);
+          } catch (_err) {
+            // Ignore storage errors
+          }
+          renderRecentOrders();
+        });
+
+        // Initialize default combined selection (50K Views + 1K Likes), order history & entry pop-up
+        syncCardStates();
+        updateFormSummary(false);
+        renderRecentOrders();
+        openReferralModal('entry');
+      })();
+    </script>
+  </body>
+</html>

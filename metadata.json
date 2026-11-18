@@ -1,0 +1,6 @@
+{
+  "name": "AuraReach — Instagram Growth Storefront",
+  "description": "Modern mobile-friendly Instagram Views and Likes storefront with instant on-page order checkout.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
